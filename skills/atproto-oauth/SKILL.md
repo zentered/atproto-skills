@@ -1,6 +1,6 @@
 ---
 name: atproto-oauth
-description: This skill should be used when the user asks to "implement ATProto OAuth", "add Bluesky login", "debug DPoP proofs", "set up PAR", "configure PKCE for ATProto", "fix ATProto OAuth errors", "set up client metadata", "debug token exchange", or mentions DPoP nonce issues, pushed authorization requests, client assertions, ATProto token refresh, or OAuth for Bluesky/AT Protocol apps. For identity resolution and handle lookups without OAuth, see atproto-domain instead.
+description: This skill should be used when the user asks to "implement ATProto OAuth", "add Bluesky login", "debug DPoP proofs", "set up pushed authorization requests", "configure PKCE for ATProto", "fix ATProto OAuth errors", "set up client metadata", "debug token exchange", "authenticate with Bluesky", "refresh token keeps invalidating", or mentions DPoP nonce issues, client assertions, base64url padding errors, OAuth callback verification, confidential client setup, or OAuth for Bluesky/AT Protocol apps. Covers the full OAuth flow — for identity resolution and handle lookups, see atproto-domain instead.
 ---
 
 # ATProto OAuth
@@ -112,9 +112,10 @@ Refresh tokens are **single-use** — each refresh returns a new refresh token. 
 6. **DPoP `typ` casing** — must be lowercase `dpop+jwt`.
 7. **Missing `iss` verification** on callback — required to prevent mix-up attacks.
 8. **Missing `sub` verification** after token exchange — required to prevent account confusion.
-9. **No nonce retry** — the first PAR/token request almost always returns 400 with a nonce. This is normal.
-10. **Client metadata unreachable** — if the auth server can't fetch the `client_id` URL, the entire flow fails silently.
-11. **Missing COOKIE_SECRET** — session cookies require an HMAC signing key. Without it, post-OAuth session creation fails even if the OAuth flow itself succeeds.
+9. **DPoP nonce retry must allow multiple attempts** — The first PAR/token request returns 400 with a `DPoP-Nonce` header. This is expected. But a single retry is not enough — the server may return a *new* nonce on the retry if the first one became stale during processing. Use a retry counter (max 2) instead of a boolean guard. The error message for this is `use_dpop_nonce` with description "nonce mismatch".
+10. **`login_hint` should be the handle, not the DID** — Pass the user's handle (e.g. `patrickheneise.com`) as `login_hint` in the PAR request so the auth server pre-fills the identifier field. Using the DID shows `@did:plc:...` which password managers won't recognize.
+11. **Client metadata unreachable** — if the auth server can't fetch the `client_id` URL, the entire flow fails silently.
+12. **Missing COOKIE_SECRET** — session cookies require an HMAC signing key. Without it, post-OAuth session creation fails even if the OAuth flow itself succeeds.
 
 ## Additional Resources
 

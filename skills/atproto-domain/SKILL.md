@@ -1,6 +1,6 @@
 ---
 name: atproto-domain
-description: This skill should be used when the user asks to "resolve a Bluesky handle", "look up a DID", "find a PDS endpoint", "discover an auth server", "work with ATProto identity", "query XRPC endpoints", or mentions AT Protocol architecture, DID documents, handle resolution, PDS discovery, ATProto scopes, or Bluesky API structure. Also use when building any AT Protocol integration that needs identity resolution before authentication.
+description: This skill should be used when the user asks to "resolve a Bluesky handle", "look up a DID", "find a PDS endpoint", "discover an auth server", "work with ATProto identity", "query XRPC endpoints", "what is did:plc vs did:web", "get a user's profile", or mentions AT Protocol architecture, DID documents, handle resolution, PDS discovery, plc.directory, ATProto scopes, XRPC NSIDs, or Bluesky API structure. Covers identity, discovery, and API fundamentals — not OAuth flows (see atproto-oauth for authentication).
 ---
 
 # AT Protocol Domain Knowledge
