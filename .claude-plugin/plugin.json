@@ -1,0 +1,11 @@
+{
+  "name": "atproto-skills",
+  "description": "Skills for building on the AT Protocol (Bluesky) — OAuth, identity, and more.",
+  "version": "0.1.0",
+  "author": "Zentered <hi@zentered.co> (https://zentered.co)",
+  "contributors": [
+    "Patrick Heneise (https://github.com/PatrickHeneise)"
+  ],
+  "tags": ["atproto", "bluesky", "oauth", "identity", "decentralized"],
+  "repository": "https://github.com/zentered/atproto-skills"
+}

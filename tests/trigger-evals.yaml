@@ -1,0 +1,53 @@
+# Trigger Evaluation Test Cases
+#
+# Each case maps an example user prompt to the skill that should trigger.
+# Review manually or feed to an LLM judge for automated eval.
+
+cases:
+  # --- atproto-oauth ---
+  - prompt: "help me implement Bluesky OAuth login"
+    expected: atproto-oauth
+  - prompt: "I'm getting a DPoP nonce error from bsky.social"
+    expected: atproto-oauth
+  - prompt: "how do I set up PAR for ATProto?"
+    expected: atproto-oauth
+  - prompt: "debug my ATProto token exchange — getting 'required a client_assertion'"
+    expected: atproto-oauth
+  - prompt: "configure PKCE for my Bluesky app"
+    expected: atproto-oauth
+  - prompt: "set up client metadata for ATProto OAuth"
+    expected: atproto-oauth
+  - prompt: "my refresh token keeps getting invalidated"
+    expected: atproto-oauth
+  - prompt: "how do I make DPoP proofs for resource requests?"
+    expected: atproto-oauth
+  - prompt: "what scopes do I need for Bluesky DMs?"
+    expected: atproto-domain
+  - prompt: "add Bluesky login to my SvelteKit app"
+    expected: atproto-oauth
+
+  # --- atproto-domain ---
+  - prompt: "resolve a Bluesky handle to a DID"
+    expected: atproto-domain
+  - prompt: "how does ATProto identity work?"
+    expected: atproto-domain
+  - prompt: "look up the PDS endpoint for a user"
+    expected: atproto-domain
+  - prompt: "what's the difference between did:plc and did:web?"
+    expected: atproto-domain
+  - prompt: "how do I call XRPC endpoints on Bluesky?"
+    expected: atproto-domain
+  - prompt: "discover the auth server for a self-hosted PDS"
+    expected: atproto-domain
+  - prompt: "what ATProto scopes are available?"
+    expected: atproto-domain
+  - prompt: "how do I get a user's profile from the Bluesky API?"
+    expected: atproto-domain
+
+  # --- ambiguous (either could reasonably trigger) ---
+  - prompt: "build a Bluesky bot that posts automatically"
+    expected: atproto-domain
+    notes: "needs identity + XRPC knowledge first, then OAuth for auth"
+  - prompt: "I want to authenticate with Bluesky from Cloudflare Workers"
+    expected: atproto-oauth
+    notes: "primarily OAuth, but atproto-domain has the Workers DNS pitfall"
