@@ -45,11 +45,11 @@ Header: { typ: "JWT", alg: "ES256", kid: <key-id> }
 Payload: {
   iss: <client_id>,
   sub: <client_id>,
-  aud: <endpoint URL being called>,
+  aud: <authorization server identifier>,
   jti: <uuid>,
   iat: <timestamp>,
   exp: <timestamp + 60s>
 }
 ```
 
-The `aud` must be the **endpoint URL** being called — PAR endpoint for PAR requests, token endpoint for token exchange. Not the issuer URL.
+The `aud` must be the **authorization server identifier** (the issuer URL, e.g. `https://bsky.social`), NOT the endpoint URL. The server validates `aud` against `authorizationServerIdentifier` from its config. This is different from many OAuth implementations that expect the token endpoint URL.

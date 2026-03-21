@@ -36,19 +36,13 @@ DIDs are the stable, permanent identifier. Always store DIDs, not handles, as th
 
 ### DID Documents
 
-Contain service endpoints and verification keys:
-```json
-{
-  "id": "did:plc:abc123",
-  "service": [
-    { "id": "#atproto_pds", "type": "AtprotoPersonalDataServer", "serviceEndpoint": "https://morel.us-east.host.bsky.network" }
-  ],
-  "verificationMethod": [...],
-  "alsoKnownAs": ["at://alice.bsky.social"]
-}
+Contain service endpoints and verification keys. The `#atproto_pds` service entry points to the user's Personal Data Server (PDS). Extract it with:
+
+```
+did_doc.service.find(s => s.id === "#atproto_pds").serviceEndpoint
 ```
 
-The `#atproto_pds` service entry points to the user's Personal Data Server (PDS).
+For full DID document examples (`did:plc` and `did:web`), see **`references/did-document-examples.md`**.
 
 ## Handle Resolution
 
