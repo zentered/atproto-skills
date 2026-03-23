@@ -40,6 +40,7 @@ Payload: { jti: <uuid>, htm: <HTTP method>, htu: <URL>, iat: <timestamp> }
 - `htu` MUST exclude query string and fragment — scheme + authority + path only
 - Add `nonce` when the server provides one via `DPoP-Nonce` header
 - Add `ath` (base64url SHA-256 of access token) when making resource requests
+- Do NOT include `iss` in DPoP JWTs for PDS resource requests
 
 ### 3. Pushed Authorization Request (PAR)
 
@@ -98,9 +99,29 @@ Refresh tokens are **single-use** — each refresh returns a new refresh token. 
 ## Development & Testing
 
 - **No sandbox exists.** Test against live `bsky.social`.
-- **Localhost exception:** Auth servers support `http://localhost` as a `client_id` origin for development.
-- **ngrok:** For HTTPS development, tunnel the local server and use the ngrok URL as `PUBLIC_URL` / `client_id`.
-- The auth server must be able to reach the client metadata URL — local-only deployments won't work for the PAR step.
+- **Localhost exception:** The spec defines a special exception for `http://localhost` — no publicly reachable metadata URL is needed. The auth server generates **virtual client metadata** automatically.
+
+### Localhost Client Rules
+
+- **`client_id`**: Use exactly `http://localhost` — no port, path must be `/`
+- **Scheme**: `http` (not https)
+- **Hostname**: Must be `localhost` (not `127.0.0.1` or `[::1]`)
+- **Client type**: Automatically treated as a **public client** (`token_endpoint_auth_method: "none"`)
+- **Configuration via query parameters** on the `client_id`:
+  - `redirect_uri` (multiple allowed) — e.g. `http://localhost?redirect_uri=http://127.0.0.1:3000/oauth/callback`
+  - `scope` — defaults to `atproto`
+- **Redirect URI matching is port-flexible** — path components must match, but port numbers are ignored
+- **Default redirect URIs**: `http://127.0.0.1/` and `http://[::1]/`
+
+### Common Localhost Pitfalls
+
+- **Hostname mismatch kills cookies** — if the session cookie is set on `localhost` but the callback redirects to `127.0.0.1` (or vice versa), the cookie won't be sent. Ensure the redirect URI hostname matches where the app serves.
+- **Hot reload wipes state** — dev servers that restart on file changes will lose in-memory session/state stores between the redirect and callback. Use file-backed or external session storage.
+- **Cookie flags** — set `secure: false` and `sameSite: 'lax'` for local HTTP dev.
+
+### Production Clients
+
+For deployed apps, the `client_id` must be a publicly reachable HTTPS URL serving the client metadata JSON. The auth server fetches it dynamically — no registration process exists.
 
 ## Common Pitfalls
 
@@ -114,7 +135,7 @@ Refresh tokens are **single-use** — each refresh returns a new refresh token. 
 8. **Missing `sub` verification** after token exchange — required to prevent account confusion.
 9. **DPoP nonce retry must allow multiple attempts** — The first PAR/token request returns 400 with a `DPoP-Nonce` header. This is expected. But a single retry is not enough — the server may return a *new* nonce on the retry if the first one became stale during processing. Use a retry counter (max 2) instead of a boolean guard. The error message for this is `use_dpop_nonce` with description "nonce mismatch".
 10. **`login_hint` should be the handle, not the DID** — Pass the user's handle (e.g. `patrickheneise.com`) as `login_hint` in the PAR request so the auth server pre-fills the identifier field. Using the DID shows `@did:plc:...` which password managers won't recognize.
-11. **Client metadata unreachable** — if the auth server can't fetch the `client_id` URL, the entire flow fails silently.
+11. **Client metadata unreachable (production only)** — for non-localhost clients, if the auth server can't fetch the `client_id` URL, the entire flow fails silently. This does not apply to `http://localhost` clients, which use virtual metadata.
 12. **Missing COOKIE_SECRET** — session cookies require an HMAC signing key. Without it, post-OAuth session creation fails even if the OAuth flow itself succeeds.
 
 ## Additional Resources
