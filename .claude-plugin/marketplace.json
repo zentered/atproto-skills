@@ -1,6 +1,8 @@
 {
   "name": "atproto-skills-marketplace",
-  "description": "AT Protocol (Bluesky) skills for Claude Code",
+  "metadata": {
+    "description": "AT Protocol (Bluesky) skills for Claude Code"
+  },
   "owner": {
     "name": "Zentered",
     "email": "hi@zentered.co"

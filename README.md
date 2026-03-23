@@ -18,16 +18,11 @@ Triggers on: "implement ATProto OAuth", "add Bluesky login", "debug DPoP proofs"
 
 ## Install
 
-From the plugin marketplace:
+Add the marketplace and install:
 
 ```bash
-claude plugin add atproto-skills
-```
-
-Or from the repository directly:
-
-```bash
-claude plugin add https://github.com/zentered/atproto-skills
+claude plugin marketplace add https://github.com/zentered/atproto-skills
+claude plugin install atproto-skills
 ```
 
 ## Contributing
