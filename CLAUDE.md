@@ -30,6 +30,10 @@ Each skill follows progressive disclosure: lean SKILL.md (~500-1500 words) with 
 
 **atproto-domain** covers identity resolution, handle→DID→PDS discovery, XRPC endpoints, and scopes. **atproto-oauth** covers the OAuth flow and assumes identity resolution is handled — it cross-references atproto-domain for prerequisites.
 
+## Changelog
+
+Update `CHANGELOG.md` when making user-facing changes to skills. Follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format. Add entries under `[Unreleased]` with the skill name in bold as prefix (e.g. `- **atproto-oauth**: fixed localhost instructions`). Categories: Added, Changed, Fixed, Removed.
+
 ## Adding a New Skill
 
 1. `mkdir -p skills/skill-name/references`
