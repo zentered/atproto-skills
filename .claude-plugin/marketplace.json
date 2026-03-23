@@ -1,0 +1,20 @@
+{
+  "name": "atproto-skills-marketplace",
+  "description": "AT Protocol (Bluesky) skills for Claude Code",
+  "owner": {
+    "name": "Zentered",
+    "email": "hi@zentered.co"
+  },
+  "plugins": [
+    {
+      "name": "atproto-skills",
+      "description": "Skills for building on the AT Protocol (Bluesky) — OAuth, identity, and more.",
+      "version": "0.1.0",
+      "source": "./",
+      "author": {
+        "name": "Zentered",
+        "email": "hi@zentered.co"
+      }
+    }
+  ]
+}
