@@ -22,6 +22,9 @@ From your terminal:
 
 ```bash
 claude plugin marketplace add https://github.com/zentered/atproto-skills
+```
+
+```bash
 claude plugin install atproto-skills
 ```
 
@@ -29,6 +32,9 @@ Or from within a Claude Code session:
 
 ```
 /plugins marketplace add https://github.com/zentered/atproto-skills
+```
+
+```
 /plugins install atproto-skills
 ```
 
