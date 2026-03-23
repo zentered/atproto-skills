@@ -1,11 +1,47 @@
 ---
 name: atproto-domain
-description: This skill should be used when the user asks to "resolve a Bluesky handle", "look up a DID", "find a PDS endpoint", "discover an auth server", "work with ATProto identity", "query XRPC endpoints", "what is did:plc vs did:web", "get a user's profile", or mentions AT Protocol architecture, DID documents, handle resolution, PDS discovery, plc.directory, ATProto scopes, XRPC NSIDs, or Bluesky API structure. Covers identity, discovery, and API fundamentals — not OAuth flows (see atproto-oauth for authentication).
+description: This skill should be used when the user asks to "resolve a Bluesky handle", "look up a DID", "find a PDS endpoint", "discover an auth server", "work with ATProto identity", "query XRPC endpoints", "what is did:plc vs did:web", "get a user's profile", "build on AT Protocol", "create a Bluesky bot", "how does federation work", "what is a lexicon", or mentions AT Protocol architecture, DID documents, handle resolution, PDS discovery, plc.directory, ATProto scopes, XRPC NSIDs, Bluesky API structure, data repositories, feed generators, labelers, or app views. Covers identity, discovery, data model, federation architecture, and API fundamentals — not OAuth flows (see atproto-oauth for authentication).
 ---
 
 # AT Protocol Domain Knowledge
 
-The AT Protocol (ATProto) is a decentralized social networking protocol. Bluesky (`bsky.social`) is the largest network built on it. This skill covers the identity layer, discovery mechanisms, and protocol fundamentals that underpin all ATProto integrations.
+The AT Protocol (ATProto) is a decentralized social networking protocol. Bluesky (`bsky.social`) is the largest network built on it. This skill covers the identity layer, discovery mechanisms, data model, and protocol fundamentals that underpin all ATProto integrations.
+
+## Federation Architecture
+
+ATProto separates **speech** (permissive, distributed data layer) from **reach** (flexible aggregation for content discovery). The network has five service types:
+
+| Service | Role | Example |
+|---|---|---|
+| **PDS** (Personal Data Server) | Hosts user repos, manages auth, stores private data | `bsky.network` hosts, or self-host via [pds repo](https://github.com/bluesky-social/pds) |
+| **Relay** (Big Graph Service) | Crawls all PDSes, emits a unified firehose stream | `bsky.network` relay |
+| **App View** | Consumes firehose, builds domain-specific indices and APIs | `public.api.bsky.app` for `app.bsky` lexicon |
+| **Feed Generator** | Produces custom feed algorithms consumed by App Views | Third-party or self-hosted |
+| **Labeler** | Applies moderation labels to content | Bluesky moderation service or custom |
+
+Data flows: PDS → Relay (firehose) → App View → Client. The PDS is the user's agent in the network — it hosts their data and handles their requests. Anyone can run any of these services.
+
+For detailed architecture information, see **`references/federation-architecture.md`**.
+
+## Data Model
+
+User data lives in **signed repositories** on the user's PDS.
+
+- **Repository** — a signed Merkle tree of records, identified by the user's DID
+- **Collection** — a group of records within a repo, named by Lexicon NSID (e.g. `app.bsky.feed.post`)
+- **Record** — a single JSON document (a post, like, follow, etc.) identified by an `rkey` (record key)
+- **AT URI** — `at://{did}/{collection}/{rkey}` — the canonical address for any record
+- **CID** — content hash of a record, used for integrity verification
+- **Blob** — binary data (images, video) stored on the PDS, referenced by CID from records
+
+### Lexicons
+
+Lexicons are schemas (similar to JSON Schema) that define the XRPC methods and record types. They use reverse-DNS NSIDs:
+
+- `com.atproto.*` — core protocol operations (identity, repo, sync, server)
+- `app.bsky.*` — Bluesky social app (feed, actor, graph, notification)
+
+New applications define their own lexicons and deploy corresponding App Views. The schema system enables interoperability — any client that understands a lexicon can work with any server implementing it.
 
 ## Identity System
 
@@ -115,8 +151,37 @@ The `transition:` prefix indicates these are temporary scopes that will be repla
 4. **Missing `@` strip** — handles entered by users often include `@` prefix. Always strip and lowercase.
 5. **Assuming PDS = API** — public API (`public.api.bsky.app`) is for unauthenticated reads. Authenticated requests go to the user's PDS endpoint from their DID document.
 
+## SDKs
+
+- **TypeScript**: `@atproto/api` — `npm install @atproto/api`
+- **Python**: `atproto` — `pip install atproto`
+- **Dart**: community-maintained `atproto.dart`
+- **CURL/HTTP**: all endpoints are standard XRPC over HTTP
+
+SDKs handle session management, token refresh, and request signing automatically.
+
+## Authentication
+
+Two approaches:
+
+1. **App Passwords** (simple, for bots/scripts) — call `com.atproto.server.createSession` with identifier + app password. Returns `accessJwt` (short-lived) and `refreshJwt` (long-lived). SDKs manage refresh automatically.
+2. **OAuth** (production apps) — full Authorization Code flow with PAR, DPoP, PKCE. See the **atproto-oauth** skill.
+
+App passwords are created in Bluesky Settings → App Passwords. They are scoped to the account but cannot access DMs without explicit scope.
+
+## Account Portability
+
+Accounts can migrate between PDSes because identity is anchored to DIDs, not servers:
+
+- **Signing key** — managed by the PDS, signs repo commits
+- **Recovery key** — held by the user, can override the signing key within 72 hours
+- **Migration** — export repo from old PDS, import to new PDS, update DID document to point to new PDS
+
+Data repos are signed Merkle trees, so integrity is verifiable independent of the hosting PDS.
+
 ## Additional Resources
 
 ### Reference Files
 
 - **`references/did-document-examples.md`** — Full DID document examples for `did:plc` and `did:web`, verification method structures, and service endpoint formats
+- **`references/federation-architecture.md`** — Detailed federation architecture: PDS, Relay, App View roles, data flow, self-hosting
