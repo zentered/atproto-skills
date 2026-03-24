@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "zentered",
+  "description": "Claude Code plugins by Zentered — a software and AI consultancy.",
+  "owner": {
+    "name": "Zentered",
+    "email": "hi@zentered.co"
+  },
+  "plugins": [
+    {
+      "name": "atproto-skills",
+      "description": "Skills for building on the AT Protocol (Bluesky) — OAuth, identity, and more.",
+      "category": "development",
+      "source": "./",
+      "homepage": "https://github.com/zentered/atproto-skills"
+    }
+  ]
+}
