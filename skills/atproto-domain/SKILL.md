@@ -1,6 +1,6 @@
 ---
 name: atproto-domain
-description: This skill should be used when the user asks to "resolve a Bluesky handle", "look up a DID", "find a PDS endpoint", "discover an auth server", "work with ATProto identity", "query XRPC endpoints", "what is did:plc vs did:web", "get a user's profile", "build on AT Protocol", "create a Bluesky bot", "how does federation work", "what is a lexicon", or mentions AT Protocol architecture, DID documents, handle resolution, PDS discovery, plc.directory, ATProto scopes, XRPC NSIDs, Bluesky API structure, data repositories, feed generators, labelers, or app views. Covers identity, discovery, data model, federation architecture, and API fundamentals — not OAuth flows (see atproto-oauth for authentication).
+description: This skill should be used when the user asks to "resolve a Bluesky handle", "look up a DID", "find a PDS endpoint", "discover an auth server", "work with ATProto identity", "query XRPC endpoints", "what is did:plc vs did:web", "get a user's profile", "build on AT Protocol", "create a Bluesky bot", "how does federation work", or mentions AT Protocol architecture, DID documents, handle resolution, PDS discovery, plc.directory, ATProto scopes, XRPC NSIDs, Bluesky API structure, data repositories, feed generators, labelers, or app views. Covers identity, discovery, data model, federation architecture, and API fundamentals — not OAuth flows (see atproto-oauth for authentication).
 ---
 
 # AT Protocol Domain Knowledge
@@ -41,7 +41,7 @@ Lexicons are schemas (similar to JSON Schema) that define the XRPC methods and r
 - `com.atproto.*` — core protocol operations (identity, repo, sync, server)
 - `app.bsky.*` — Bluesky social app (feed, actor, graph, notification)
 
-New applications define their own lexicons and deploy corresponding App Views. The schema system enables interoperability — any client that understands a lexicon can work with any server implementing it.
+New applications define their own lexicons and deploy corresponding App Views. The schema system enables interoperability — any client that understands a lexicon can work with any server implementing it. For the full type system, naming conventions, evolution rules, and tooling, see the **atproto-lexicon** skill.
 
 ## Identity System
 

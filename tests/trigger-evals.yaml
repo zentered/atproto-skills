@@ -44,6 +44,28 @@ cases:
   - prompt: "how do I get a user's profile from the Bluesky API?"
     expected: atproto-domain
 
+  # --- atproto-lexicon ---
+  - prompt: "how do I define a new lexicon for my app?"
+    expected: atproto-lexicon
+  - prompt: "create a record type for my custom data"
+    expected: atproto-lexicon
+  - prompt: "what types are available in lexicon schemas?"
+    expected: atproto-lexicon
+  - prompt: "publish my lexicon to the AT Protocol network"
+    expected: atproto-lexicon
+  - prompt: "generate TypeScript types from lexicon schemas"
+    expected: atproto-lexicon
+  - prompt: "should I use enum or knownValues in my lexicon?"
+    expected: atproto-lexicon
+  - prompt: "design an XRPC query endpoint with pagination"
+    expected: atproto-lexicon
+  - prompt: "how do lexicon evolution rules work?"
+    expected: atproto-lexicon
+  - prompt: "install lexicons with @atproto/lex"
+    expected: atproto-lexicon
+  - prompt: "what NSID naming conventions should I follow?"
+    expected: atproto-lexicon
+
   # --- ambiguous (either could reasonably trigger) ---
   - prompt: "build a Bluesky bot that posts automatically"
     expected: atproto-domain

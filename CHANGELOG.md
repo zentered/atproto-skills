@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **atproto-lexicon**: new skill covering the Lexicon schema language — type system, NSID naming, schema structure, evolution rules, publishing with goat, codegen with @atproto/lex
 - **atproto-domain**: federation architecture section (PDS, Relay, App View, Feed Generator, Labeler)
 - **atproto-domain**: data model section (repositories, records, collections, lexicons, AT URIs, blobs)
 - **atproto-domain**: SDK quickstart (TypeScript, Python, Dart)

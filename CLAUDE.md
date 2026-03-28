@@ -23,12 +23,13 @@ Trigger evals in `tests/trigger-evals.yaml` are reviewed manually or by LLM — 
 .claude-plugin/plugin.json    # Plugin manifest (name, version, tags)
 skills/
   atproto-domain/             # AT Protocol fundamentals (identity, DIDs, XRPC)
+  atproto-lexicon/            # Lexicon schema language (types, naming, publishing, codegen)
   atproto-oauth/              # OAuth flow (PAR, DPoP, PKCE, client metadata)
 ```
 
 Each skill follows progressive disclosure: lean SKILL.md (~500-1500 words) with detailed content in `references/`.
 
-**atproto-domain** covers identity resolution, handle→DID→PDS discovery, XRPC endpoints, and scopes. **atproto-oauth** covers the OAuth flow and assumes identity resolution is handled — it cross-references atproto-domain for prerequisites.
+**atproto-domain** covers identity resolution, handle→DID→PDS discovery, XRPC endpoints, and scopes. **atproto-lexicon** covers the Lexicon schema language — type system, NSID naming, evolution rules, and tooling (goat, @atproto/lex). **atproto-oauth** covers the OAuth flow and assumes identity resolution is handled — it cross-references atproto-domain for prerequisites.
 
 ## Changelog
 
