@@ -10,6 +10,12 @@ AT Protocol fundamentals — identity resolution, DIDs, handle lookups, PDS disc
 
 Triggers on: "resolve a Bluesky handle", "look up a DID", "find a PDS endpoint", "how does ATProto identity work", etc.
 
+### atproto-lexicon
+
+Lexicon schema language — schema structure, type system, NSID naming, record types, XRPC endpoints, evolution rules, publishing, and codegen (`goat`, `@atproto/lex`).
+
+Triggers on: "define a lexicon", "create a lexicon schema", "design an XRPC endpoint", "generate types from a lexicon", "publish a lexicon", "how do lexicon types work", etc.
+
 ### atproto-oauth
 
 OAuth implementation guide — PAR, DPoP, PKCE, client metadata, token exchange, and common pitfalls (including the base64url padding trap).
