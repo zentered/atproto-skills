@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **trigger-evals**: LLM-judged eval results (30/30 pass, 100%) added to `tests/trigger-eval-results.md` and README
+- **quality-evals**: with-vs-without skill quality eval (4/6 high-risk without skills) added to `tests/quality-eval-results.md` and README
 - **atproto-lexicon**: new skill covering the Lexicon schema language — type system, NSID naming, schema structure, evolution rules, publishing with goat, codegen with @atproto/lex
 - **atproto-domain**: federation architecture section (PDS, Relay, App View, Feed Generator, Labeler)
 - **atproto-domain**: data model section (repositories, records, collections, lexicons, AT URIs, blobs)
