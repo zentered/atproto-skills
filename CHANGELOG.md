@@ -21,9 +21,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **atproto-oauth**: localhost development section with full rules (no ngrok needed)
 - **atproto-oauth**: common localhost pitfalls (hostname mismatch, hot reload, cookie flags)
 - **atproto-oauth**: DPoP note — `iss` should not be included in PDS resource request JWTs
+- **atproto-lexicon**: manual publishing via `com.atproto.repo.putRecord` (rkey = full NSID) as an alternative to `goat lex publish`
+- **atproto-lexicon**: resolution verification steps (`dig` TXT + `getRecord`) and the `failed to resolve lexicon authority` symptom
+- **atproto-lexicon**: pitfall on wrong `_lexicon` authority / rkey
 
 ### Fixed
 
+- **atproto-lexicon**: corrected the DNS authority example — `_lexicon.<authority>` drops the NSID's name segment (`_lexicon.myapp.dev`, not `_lexicon.thing.myapp.dev`)
 - **atproto-oauth**: removed incorrect claim that ngrok is required for local development
 - **atproto-oauth**: removed incorrect claim that auth server must reach client metadata URL (localhost uses virtual metadata)
 - **atproto-oauth**: scoped pitfall #11 (client metadata unreachable) to production clients only

@@ -71,17 +71,78 @@ export GOAT_USERNAME="handle.example.com"
 export GOAT_PASSWORD="app-password-here"
 ```
 
+### Publishing manually (without goat)
+
+`goat lex publish` is a convenience wrapper. A `com.atproto.lexicon.schema`
+record is an ordinary repo record, so you can publish one directly with
+`com.atproto.repo.putRecord`, which is handy for a one-off script or a CI step.
+
+Two rules the record must follow:
+
+- **rkey is the full NSID.** The record is stored at rkey `dev.myapp.thing`, not
+  `main` and not a TID.
+- **`$type` is `com.atproto.lexicon.schema`**, and the lexicon body (`lexicon: 1`,
+  `id`, `defs`) is nested inside `record`.
+
+putRecord body:
+
+```json
+{
+  "repo": "did:plc:abc123",
+  "collection": "com.atproto.lexicon.schema",
+  "rkey": "dev.myapp.thing",
+  "record": {
+    "$type": "com.atproto.lexicon.schema",
+    "lexicon": 1,
+    "id": "dev.myapp.thing",
+    "defs": { "main": { "type": "record", "key": "self", "record": { "...": "..." } } }
+  }
+}
+```
+
+Authoring the record needs an authenticated session for the **authority account**
+(the DID the `_lexicon` TXT points at), not an end-user session. The `key` inside
+`defs.main` must match how the app actually writes records: `literal:self` when
+records live at rkey `self`, or `tid` for timestamp keys.
+
 ### DNS Resolution for Authority
 
-Lexicon authority is rooted in DNS domain control. To associate an NSID namespace with a DID:
+Lexicon authority is rooted in DNS domain control. An NSID splits into a **domain
+authority** (every segment except the last) and a **name** (the last segment).
+Authority is registered against the domain authority only; the name segment is
+dropped.
 
-Create a TXT record: `_lexicon.<reversed-authority>` containing `did=<DID>`
+To associate an NSID's authority with a DID, create a TXT record at
+`_lexicon.<domain-authority>` containing `did=<DID>`.
 
 Example for NSID `dev.myapp.thing`:
-- DNS name: `_lexicon.thing.myapp.dev`
+- domain authority: `myapp.dev` (not `thing.myapp.dev`, since `thing` is the name)
+- name: `thing`
+- DNS name: `_lexicon.myapp.dev`
 - TXT value: `did=did:plc:abc123`
 
-Resolution is non-hierarchical — no recursion up or down the DNS hierarchy.
+Every lexicon sharing a domain authority (`dev.myapp.thing`, `dev.myapp.other`)
+resolves through the **same** `_lexicon.myapp.dev` record. Resolution is
+non-hierarchical: no recursion up or down the DNS hierarchy.
+
+### Verifying resolution
+
+A resolver walks: NSID to domain authority, `_lexicon.<authority>` TXT to a DID,
+resolve that DID's PDS, then fetch the `com.atproto.lexicon.schema` record at
+rkey = NSID. Two checks confirm both halves are in place:
+
+```bash
+# 1. DNS authority resolves to the schema-holder DID
+dig +short TXT _lexicon.myapp.dev
+#   "did=did:plc:abc123"
+
+# 2. The schema record exists at rkey = the full NSID
+curl -s "<pds>/xrpc/com.atproto.repo.getRecord?repo=did:plc:abc123\
+&collection=com.atproto.lexicon.schema&rkey=dev.myapp.thing"
+```
+
+If the TXT record is missing or the rkey is wrong, inspectors (such as pds.ls)
+report `failed to resolve lexicon authority; nsid=<nsid>`.
 
 ## Installing with @atproto/lex
 

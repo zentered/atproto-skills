@@ -48,7 +48,7 @@ Namespaced Identifiers use reverse-DNS notation to prevent collisions:
 - `app.bsky.*` — Bluesky social app (feed, actor, graph, notification)
 - `dev.myapp.*` — custom application namespace
 
-Authority over an NSID namespace is rooted in DNS domain ownership. Register authority via DNS TXT record: `_lexicon.<reversed-authority>` with value `did=<DID>`.
+Authority over an NSID namespace is rooted in DNS domain ownership. The authority is the NSID minus its final (name) segment: for `dev.myapp.thing` the authority is `myapp.dev`. Register it via a DNS TXT record at `_lexicon.<authority>` (e.g. `_lexicon.myapp.dev`, not `_lexicon.thing.myapp.dev`) with value `did=<DID>`.
 
 ## Primary Definition Types
 
@@ -245,6 +245,7 @@ For full tooling details, see **`references/publishing-installing.md`**.
 4. **Handles in record schemas** — always reference accounts by DID in records. Handles are mutable and belong only in query params (as `at-identifier`).
 5. **Missing format on strings** — always specify `format` when a semantic type exists (datetime, DID, handle, AT URI). Omitting it loses validation.
 6. **Ignoring evolution rules** — test changes with `goat lex diff` before publishing. A breaking change to a published lexicon requires a new NSID.
+7. **Wrong `_lexicon` authority or rkey** — the DNS TXT drops the NSID's name segment (`_lexicon.myapp.dev`, not `_lexicon.thing.myapp.dev`), and the `com.atproto.lexicon.schema` record's rkey is the *full* NSID (`dev.myapp.thing`). Getting either wrong yields `failed to resolve lexicon authority`.
 
 ## Additional Resources
 
