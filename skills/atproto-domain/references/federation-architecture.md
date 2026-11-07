@@ -22,7 +22,7 @@ Run a PDS using the official distribution: https://github.com/bluesky-social/pds
 
 Self-hosted PDS instances participate in the federated network. The Relay crawls them like any other PDS. Users on self-hosted PDSes appear identically to users on `bsky.network`.
 
-## Relay (Big Graph Service)
+## Relay
 
 The Relay crawls all known PDSes and consolidates updates into a unified event stream (the "firehose"). Downstream services subscribe to this stream instead of crawling PDSes individually.
 
