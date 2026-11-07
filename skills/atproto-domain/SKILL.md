@@ -14,7 +14,7 @@ ATProto separates **speech** (permissive, distributed data layer) from **reach**
 | Service | Role | Example |
 |---|---|---|
 | **PDS** (Personal Data Server) | Hosts user repos, manages auth, stores private data | `bsky.network` hosts, or self-host via [pds repo](https://github.com/bluesky-social/pds) |
-| **Relay** (Big Graph Service) | Crawls all PDSes, emits a unified firehose stream | `bsky.network` relay |
+| **Relay** | Crawls all PDSes, emits a unified firehose stream | `bsky.network` relay |
 | **App View** | Consumes firehose, builds domain-specific indices and APIs | `public.api.bsky.app` for `app.bsky` lexicon |
 | **Feed Generator** | Produces custom feed algorithms consumed by App Views | Third-party or self-hosted |
 | **Labeler** | Applies moderation labels to content | Bluesky moderation service or custom |
@@ -134,14 +134,21 @@ Require OAuth tokens, sent to the user's PDS:
 
 ## Scopes
 
-ATProto OAuth scopes control access levels:
+ATProto OAuth scopes control access levels. The permission scope syntax is defined in https://atproto.com/specs/permission.
 
 - `atproto` — mandatory for all sessions
-- `transition:generic` — broad PDS read/write (equivalent to legacy App Passwords; temporary until granular scopes ship)
+- `repo:<collection>` — write records in a collection, optionally limited with `action=create|update|delete`
+- `blob:<mime>` — upload blobs, e.g. `blob:*/*`
+- `rpc:<lxm>?aud=<service DID>` — call an XRPC endpoint on another service
+- `account:<attr>` — account settings, e.g. `account:email`, `account:repo?action=manage`
+- `identity:<attr>` — identity settings, e.g. `identity:handle`
+- `include:<nsid>` — a permission set, expanded by the authorization server
+
+Legacy transitional scopes. The spec plans to deprecate and remove them, so use the granular scopes in new code:
+
+- `transition:generic` — broad PDS read/write, equivalent to legacy App Passwords
 - `transition:chat.bsky` — DM access (requires `transition:generic`)
 - `transition:email` — account email access
-
-The `transition:` prefix indicates these are temporary scopes that will be replaced by fine-grained permissions.
 
 ## Common Pitfalls
 
