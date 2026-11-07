@@ -89,10 +89,14 @@ The `ath` claim is the base64url-encoded SHA-256 hash of the access token. Handl
 
 ## Token Lifetimes
 
+Maximums from the spec, "Tokens and Session Lifetime" (https://atproto.com/specs/oauth). An authorization server may issue shorter lifetimes.
+
 | Client Type | Access Token | Refresh Token | Overall Session |
 |---|---|---|---|
-| Public | ≤30 min | ~2 weeks | ~2 weeks |
-| Confidential | ≤30 min | ~3 months | ~2 years |
+| Public (untrusted) | under 30 min | 2 weeks | 2 weeks |
+| Confidential | under 30 min | 180 days | unlimited |
+
+If the server cannot revoke individual access tokens, the spec caps them at 15 minutes.
 
 Refresh tokens are **single-use** — each refresh returns a new refresh token. Implement locking to prevent concurrent refresh requests, which would invalidate the session.
 
