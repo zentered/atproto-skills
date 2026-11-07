@@ -14,7 +14,7 @@ ATProto separates **speech** (permissive, distributed data layer) from **reach**
 | Service | Role | Example |
 |---|---|---|
 | **PDS** (Personal Data Server) | Hosts user repos, manages auth, stores private data | `bsky.network` hosts, or self-host via [pds repo](https://github.com/bluesky-social/pds) |
-| **Relay** (Big Graph Service) | Crawls all PDSes, emits a unified firehose stream | `bsky.network` relay |
+| **Relay** | Crawls all PDSes, emits a unified firehose stream | `bsky.network` relay |
 | **App View** | Consumes firehose, builds domain-specific indices and APIs | `public.api.bsky.app` for `app.bsky` lexicon |
 | **Feed Generator** | Produces custom feed algorithms consumed by App Views | Third-party or self-hosted |
 | **Labeler** | Applies moderation labels to content | Bluesky moderation service or custom |
