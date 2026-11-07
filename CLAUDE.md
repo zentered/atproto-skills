@@ -15,7 +15,7 @@ A Claude Code plugin providing skills for building on the AT Protocol (Bluesky).
 
 Tests check: frontmatter validity, third-person descriptions, trigger phrase count, word count range (500-3000), referenced files exist, no orphaned resources, no second-person writing.
 
-Trigger evals in `tests/trigger-evals.yaml` are reviewed manually or by LLM — no automated runner.
+Trigger evals in `tests/trigger-evals.yaml` run through `tests/run-trigger-eval.sh`. The script scores keyword overlap between each prompt and each skill, so it is a heuristic. Judge trigger accuracy manually or by LLM.
 
 ## Architecture
 
