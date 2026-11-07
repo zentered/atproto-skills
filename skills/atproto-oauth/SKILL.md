@@ -53,7 +53,7 @@ POST to the PAR endpoint with all auth parameters in the body.
 - `code_challenge`, `code_challenge_method` ("S256")
 - `client_assertion_type` ("urn:ietf:params:oauth:client-assertion-type:jwt-bearer")
 - `client_assertion` (signed JWT — confidential clients only)
-- `login_hint` (optional but recommended — the user's DID)
+- `login_hint` (optional but recommended — the exact identifier the user entered, handle or DID)
 
 **Headers:** `Content-Type: application/x-www-form-urlencoded`, `DPoP: <proof>`
 
@@ -134,7 +134,7 @@ For deployed apps, the `client_id` must be a publicly reachable HTTPS URL servin
 7. **Missing `iss` verification** on callback — required to prevent mix-up attacks.
 8. **Missing `sub` verification** after token exchange — required to prevent account confusion.
 9. **DPoP nonce retry must allow multiple attempts** — The first PAR/token request returns 400 with a `DPoP-Nonce` header. This is expected. But a single retry is not enough — the server may return a *new* nonce on the retry if the first one became stale during processing. Use a retry counter (max 2) instead of a boolean guard. The error message for this is `use_dpop_nonce` with description "nonce mismatch".
-10. **`login_hint` should be the handle, not the DID** — Pass the user's handle (e.g. `patrickheneise.com`) as `login_hint` in the PAR request so the auth server pre-fills the identifier field. Using the DID shows `@did:plc:...` which password managers won't recognize.
+10. **`login_hint` should be the identifier the user entered** — Pass the exact handle or DID the user typed (e.g. `patrickheneise.com` or `did:plc:...`) as `login_hint` in the PAR request. The spec recommends this so the sign-in form matches what the user typed. Store the resolved DID as the account identifier.
 11. **Client metadata unreachable (production only)** — for non-localhost clients, if the auth server can't fetch the `client_id` URL, the entire flow fails silently. This does not apply to `http://localhost` clients, which use virtual metadata.
 12. **Missing COOKIE_SECRET** — session cookies require an HMAC signing key. Without it, post-OAuth session creation fails even if the OAuth flow itself succeeds.
 
